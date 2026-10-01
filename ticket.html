@@ -1,0 +1,145 @@
+
+
+    <title>IKO</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="assets/ticket.css">
+    <link rel="stylesheet" href="assets/main2.css">
+<!-- Ustawienia dla iOS Web App -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, user-scalable=no">
+<meta name="apple-mobile-web-app-title" content=“IKO”>
+
+<!-- Ikony dla ekranu głównego -->
+<link rel="apple-touch-icon" href="icon.png">
+</head>
+<body>
+<div id="loadingOverlay"></div>
+<div id="startupOverlay">
+    <div class="container top-bar2">
+<img class="img incline" src="assets/x.png" alt="Opis zdjęcia" style="width:26px;height:26px">
+        <div class="text">
+            <p class="login_title">Logowanie</p>
+        </div>
+    </div>
+
+    <div class="overlay-content">
+        <h2>Podaj PIN, aby zalogować się do aplikacji</h2>
+<input
+    id="vehicleInput"
+    type="tel"
+    inputmode="numeric"
+    maxlength="4"
+    autocomplete="off"
+>
+<div class="pin-boxes">
+    <div class="pin-dot" id="dot1"></div>
+    <div class="pin-dot" id="dot2"></div>
+    <div class="pin-dot" id="dot3"></div>
+    <div class="pin-dot" id="dot4"></div>
+</div>
+
+    </div>
+
+</div>
+<div class="container top-bar">
+<img class="img incline" src="assets/back.png" alt="Opis zdjęcia" style="width:30px;height:30px">
+  <div class="text">
+    <p class="main_title">Jednorazowy I Normalny</p>
+    <p class="title">Grudziądz UM; bilety jednorazowe</p>
+    </div>
+<img class="img incline" src="assets/star.png" alt="Opis zdjęcia" style="width:27px;height:27px">
+    </div>
+<div class="marquee-container">
+    <img class="marquee-img" src="assets/flag.png" alt="przesuwające się zdjęcie">
+</div>
+
+<div class="container2">
+    <img src="assets/qr.png" alt="Opis obrazu" class="responsive-image">
+</div>
+
+<div class="container3">
+    <div class="text">
+        <p class="main1">Status</p>
+        <p class="green">Aktywny</p>
+        <p class="main1">Bilet</p>
+        <p class="secondary1">Jednorazowy I Normalny</p>
+        <p class="main1">Nr boczny pojazdu:</p>
+	<p class="secondary1" id="vehicleNumber"></p>
+        <p class="main1">Cena biletu</p>
+        <p class="secondary1">3,80 PLN</p>
+        <p class="main1">Numer kontrolny</p>
+        <p class="secondary1">84656</p>
+        <p class="main1">Numer biletu</p>
+        <p class="secondary1">631921733</p>
+        <p class="main1">Bilet zakupiony</p>
+        <p class="date">temp</p>
+<script>
+    // Funkcja wywołana po załadowaniu strony
+    window.addEventListener('DOMContentLoaded', () => {
+        // Pobieramy aktualny czas
+        const now = new Date();
+
+        // Odejmujemy 6 minut
+        now.setMinutes(now.getMinutes() - 6);
+
+        // Formatujemy datę i godzinę w czytelny sposób, np. "DD.MM.YYYY HH:MM"
+        const day = String(now.getDate()).padStart(2, '0');
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // miesiące liczone od 0
+        const year = now.getFullYear();
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        const formatted = `${day}.${month}.${year}r. ${hours}:${minutes}:47`;
+
+        // Podmieniamy zawartość elementu
+        document.querySelector('.date').textContent = formatted;
+    });
+
+const input = document.getElementById("vehicleInput");
+const dots = document.querySelectorAll(".pin-dot");
+const overlay = document.getElementById("startupOverlay");
+const vehicleNumber = document.getElementById("vehicleNumber");
+
+input.focus();
+dots[0].classList.add("active");
+
+overlay.addEventListener("click", () => {
+    input.focus();
+});
+
+input.addEventListener("input", () => {
+    input.value = input.value.replace(/\D/g, "");
+
+dots.forEach((dot, index) => {
+    dot.classList.toggle("filled", index < input.value.length);
+    dot.classList.remove("active");
+});
+
+if (input.value.length < 4) {
+    dots[input.value.length].classList.add("active");
+}
+
+if (input.value.length === 4) {
+    vehicleNumber.textContent = Number(input.value);
+
+    document.getElementById("loadingOverlay").style.display = "block";
+
+    setTimeout(() => {
+        overlay.style.display = "none";
+        document.getElementById("loadingOverlay").style.display = "none";
+    }, 500);
+}
+});
+</script>
+
+    </div>
+</div>
+
+<div class="container bottom-bar">
+<button class="fancy-btn">Wpisz kod od kontrolera</button>
+    </div>
+
+</body>
+
